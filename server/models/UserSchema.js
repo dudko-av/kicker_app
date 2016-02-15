@@ -7,7 +7,8 @@ var UserSchema = new Schema({
     wins: Number,
     losses: Number,
     bloodEnemy: String,//another userId
-    bestComp: String//another userId
+    bestComp: String,//another userId
+    achievements: Array
 });
 
 mongoose.model('User', UserSchema);
