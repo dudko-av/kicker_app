@@ -13,8 +13,7 @@
         $stateProvider
             .state('login', {
                 url: '/login',
-                controller: 'AuthController',
-                templateUrl: 'ekasud/core/views/login.html'
+                template: '<login></login>'
             });
     }
 

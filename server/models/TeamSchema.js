@@ -1,9 +1,10 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+require('./UserSchema');
 var userSchema = mongoose.model('User').schema;
 
 var TeamSchema = new Schema({
     players: [userSchema]
 });
 
-mongoose.model('Team', TeamSchema);
+module.exports = mongoose.model('Team', TeamSchema);

@@ -1,10 +1,11 @@
 var config = require('./config'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    fs = require('fs');
 
 module.exports = function () {
     var db = mongoose.connect(config.db);
-    require('../models/UserSchema');
-    require('../models/GameSchema');
-    require('../models/TeamSchema');
+    fs.readdirSync('./server/models').forEach(function (file) {
+        require('../models/' + file);
+    });
     return db;
 };
