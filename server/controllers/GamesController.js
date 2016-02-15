@@ -6,7 +6,21 @@ module.exports.controller = function (app) {
      */
     app.get('/game/create', function (req, res) {
         var Game = mongoose.model('Game');
-        var game = new Game({});
+        var game = new Game({
+            date: Date.now()
+        });
+        // any logic goes here
+        game.save( function( err ){
+            if(!err){
+                console.log('Game saved!');
+            }
+        });
+        res.send(game);
+    });
+
+    app.post('/game/addTeam', function (req, res) {
+        var Game = mongoose.model('Game');
+        var game = Game.findById(req.gameId);
         // any logic goes here
         res.send(game);
     });

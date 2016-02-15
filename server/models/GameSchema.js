@@ -5,6 +5,7 @@ require('./TeamSchema');
 var teamSchema = mongoose.model('Team').schema;
 
 var GameSchema = new Schema({
+    date: Date,
     teams: [teamSchema]
 });
 
