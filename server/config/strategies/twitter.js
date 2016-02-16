@@ -5,13 +5,23 @@ module.exports = function () {
     passport.use(new TwitterStrategy({
             consumerKey: 'sKrTcP9bMAINWGBWUAsGLCmcL',
             consumerSecret: '2CyWwR7zP2Xt15eKuXAo2wUWZrwOOLEfyKKFcfhPgIuxRcsmOK',
-            callbackURL: 'http://localhost:3333/oauth/twitter/callback'
-        }, function(token, tokenSecret, profile, done) {
-            //User.findOrCreate(..., function(err, user) {
-            //    if (err) { return done(err); }
-            //    done(null, user);
-            //});
-            done(null, profile);
+            callbackURL: 'http://localhost:3333/auth/twitter/callback'
+        }, function (token, tokenSecret, profile, done) {
+            var User = require('mongoose').model('User');
+            User.find({provider: 'twitter', providerId: profile.id}, function (err, user) {
+                if (user.length) {
+                    done(null, user[0]);
+                } else {
+                    var newUser = new User({
+                        displayName: profile.username,
+                        provider: profile.provider,
+                        providerId: profile.id
+                    });
+                    newUser.save(function () {
+                        done(null, newUser);
+                    });
+                }
+            });
         }
     ));
 };

@@ -5,11 +5,12 @@ module.exports.controller = function (app) {
     app.use('/auth/facebook',function(req, res, next) {
         passport.authenticate('facebook', function(err, user, info) {
             if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
-            req.logIn(user, function(err) {
-                if (err) { return next(err); }
-                return res.redirect('/users/' + user.username);
-            });
+            //if (!user) { return res.redirect('/login'); }
+            //req.logIn(user, function(err) {
+            //    if (err) { return next(err); }
+            //    return res.redirect('/users/' + user.username);
+            //});
+            return res.send(user);
         })(req, res, next);
     });
 
@@ -28,11 +29,12 @@ module.exports.controller = function (app) {
     app.use('/auth/twitter',function(req, res, next) {
         passport.authenticate('twitter', function(err, user, info) {
             if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
-            req.logIn(user, function(err) {
-                if (err) { return next(err); }
-                return res.redirect('/users/' + user.username);
-            });
+            //if (!user) { return res.redirect('/login'); }
+            //req.logIn(user, function(err) {
+            //    if (err) { return next(err); }
+            //    return res.redirect('/users/' + user.username);
+            //});
+            return res.send(user);
         })(req, res, next);
     });
 
