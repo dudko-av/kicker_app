@@ -4,6 +4,7 @@ var passport = require('passport'),
 
 module.exports = function () {
     passport.use(new FacebookStrategy(config, function(accessToken, refreshToken, profile, done) {
+            var User
             done(null, profile);
         }
     ));
