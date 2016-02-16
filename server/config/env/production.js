@@ -1,7 +1,8 @@
 module.exports = {
-    ip: 'localhost',
-    port: 3333,
-    db: 'mongodb://localhost/kicker_app',
+    db: process.env.OPENSHIFT_MONGODB_DB_URL + 'kicker_app',
+    ip: process.env.OPENSHIFT_NODEJS_IP,
+    port: process.env.OPENSHIFT_NODEJS_PORT,
+    // db: 'mongodb://localhost/kicker_app',
     sessionSecret: 'devSessionSecret',
     facebook: {
         clientID: '1685748595015872',

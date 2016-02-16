@@ -1,5 +1,6 @@
 var mongoose = require('./config/mongoose');
 var passport = require('./config/passport');
+var config = require('./config/config');
 
 var express = require('express');
 var cors = require('cors');
@@ -29,7 +30,11 @@ io.on('connection', function (socket) {
     console.log('new socket io connection');
 });
 
-server.listen(3333);
-console.log('Server running at localhost:3333');
+// server.listen(3333);
+// console.log('Server running at localhost:3333');
+
+server.listen(config.port, config.ip, function () {
+    console.log('Server running at ' + config.port);
+});
 
 module.exports = app;
