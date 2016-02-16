@@ -26,7 +26,7 @@ fs.readdirSync('./server/controllers').forEach(function (file) {
 });
 
 io.on('connection', function (socket) {
-    console.log(123);
+    console.log('new socket io connection');
 });
 
 server.listen(3333);
