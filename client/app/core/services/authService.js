@@ -15,16 +15,22 @@
             }]
         });
 
-        authService.$inject = ['$http'];
+        authService.$inject = ['$q'];
 
-        function authService($http) {
+        function authService($q) {
             var service = this;
             angular.extend(service, {
                 login: login
             });
 
             function login(provider) {
-                return $http.post('auth/' + provider);
+                var deferred = $q.defer();
+                //return $http.post('auth/' + provider);
+                var authWindow = window.open('auth/' + provider);
+                authWindow.onunload = function () {
+                    debugger
+                };
+                return deferred.promise;
             }
         }
     }
