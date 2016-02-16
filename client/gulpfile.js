@@ -34,7 +34,8 @@ var walkSync = function(dir, filelist) {
             filelist = walkSync(dir + '/' + file, filelist);
         }
         else {
-            filelist.push(dir + '/' + file);
+            if (file.indexOf('.js') > -1)
+                filelist.push(dir + '/' + file);
         }
     });
     return filelist;

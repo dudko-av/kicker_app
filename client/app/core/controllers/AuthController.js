@@ -5,8 +5,20 @@
         .module('kicker_app')
         .controller('AuthController', AuthController);
 
-    function AuthController() {
-        debugger
+    AuthController.$inject = ['auth'];
+
+    function AuthController(auth) {
+        var ctrl = this;
+        angular.extend(ctrl, {
+            login: login
+        });
+
+        function login(provider) {
+            auth.login(provider).then(function (res) {
+                debugger
+
+            });
+        }
     }
 
 })();

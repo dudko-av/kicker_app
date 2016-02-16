@@ -11,6 +11,17 @@ module.exports.controller = function (app) {
         res.send(game);
     });
 
+    app.get('/game/addTeam', function (req, res) {
+        var Game = mongoose.model('Game');
+        var Team = mongoose.model('Team');
+        var game = new Game({
+            commands: [new Team(), new Team()]
+        });
+        game.save(function (err) {
+            res.send(game);
+        });
+    });
+
     /**
      * About page route
      */

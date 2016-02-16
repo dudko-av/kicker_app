@@ -1,12 +1,16 @@
 var mongoose = require('./config/mongoose');
+var passport = require('./config/passport');
+
 var express = require('express');
+var cors = require('cors');
 var session = require('express-session');
-var passport = require('passport');
 var fs = require('fs');
 
 var db = mongoose();
 var app = express();
+passport = passport();
 
+app.use(cors());
 app.use(express.static('client'));
 //app.use(require('cookie-parser')());
 //app.use(require('body-parser').urlencoded({ extended: true }));

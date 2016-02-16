@@ -9,11 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "mongoose": "^4.4.3",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.1.0"
+    "passport-facebook": "^2.1.0",
+    "passport-twitter": "^1.0.4"
   },
   "devDependencies": {
     "mongo-express": "^0.30.13"
