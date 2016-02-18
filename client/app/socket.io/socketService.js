@@ -12,7 +12,7 @@
                 return $injector.instantiate(socketService);
             }]
         });
-        var socket = io('http://localhost:3333');
+        var socket = io(location.origin);
 
         socketService.$inject = ['$q', '$rootScope'];
 
