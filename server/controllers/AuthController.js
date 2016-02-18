@@ -12,8 +12,8 @@ module.exports.controller = function (app, io) {
     // Facebook
     app.use('/auth/facebook',function(req, res, next) {
         passport.authenticate('facebook', function(err, user, info) {
-            // if (err) { return next(err); }
-            //if (!user) { return res.redirect('/login'); }
+            if (err) { return next(err); }
+            if (!user) { return res.sendStatus(401); }
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
                 res.setHeader('content-type', 'application/javascript');
@@ -26,38 +26,41 @@ module.exports.controller = function (app, io) {
     app.use('/auth/facebook/callback', function(req, res, next) {
         passport.authenticate('facebook', function(err, user, info) {
             if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
+            if (!user) { return res.sendStatus(401); }
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
                 return res.send(user);
             });
+            // return res.send(user);
         })(req, res, next);
     });
 
     // Twitter
     app.use('/auth/twitter',function(req, res, next) {
         passport.authenticate('twitter', function(err, user, info) {
+            if (err) { return next(err); }
+            if (!user) { return res.sendStatus(401); }
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
-                res.setHeader('content-type', 'text/javascript');
-                return res.send('window.close()');
+                return res.send(user);
             });
+            // return res.send(user);
         })(req, res, next);
     });
 
     app.use('/auth/twitter/callback', function(req, res, next) {
         passport.authenticate('twitter', function(err, user, info) {
             if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
+            if (!user) { return res.sendStatus(401); }
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
-                return res.redirect('/users/' + user.username);
+                return res.send(user);
             });
+            // return res.send(user);
         })(req, res, next);
     });
 
     app.use('/managing-environment-variables', function(req, res, next) {
-        var text = '';
         res.send(process.env);
     });
 
