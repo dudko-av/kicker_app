@@ -2,7 +2,7 @@
   "name": "kicker_app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/server",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,11 +11,14 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "mongoose": "^4.4.3",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.1.0"
+    "passport-facebook": "^2.1.0",
+    "passport-twitter": "^1.0.4",
+    "socket.io": "^1.4.5"
   },
   "devDependencies": {
     "mongo-express": "^0.30.13"

@@ -3,7 +3,8 @@
 
     angular.module('kicker_app', [
         'ngMaterial',
-        'ui.router'
+        'ui.router',
+        'socket.io'
     ]);
 
 })();

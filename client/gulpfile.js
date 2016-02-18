@@ -14,13 +14,14 @@ var replace = require('gulp-replace');
 //var runSequence = require('run-sequence');
 var fs = require('fs');
 var htmlreplace = require('gulp-html-replace');
+var gulpPath = require('gulp-path');
 var filenames = require("gulp-filenames");
 var recursive = require('recursive-readdir');
 var rename = require("gulp-rename");
 
 function getRelativePath(arr) {
     return arr.map(function (item) {
-        return item.replace(__dirname + '\\', '').replace(__dirname + '/', '').replace(/\\/g, '/');
+        return item.replace(__dirname + '\\', '').replace(/\\/g, '/');
     });
 }
 
@@ -40,13 +41,29 @@ var walkSync = function(dir, filelist) {
     return filelist;
 };
 
+var walkSyncScc = function(dir, filelist) {
+    var fs = fs || require('fs'),
+        files = fs.readdirSync(dir);
+    filelist = filelist || [];
+    files.forEach(function(file) {
+        if (fs.statSync(dir + '/' + file).isDirectory()) {
+            filelist = walkSync(dir + '/' + file, filelist);
+        }
+        else {
+            if (file.indexOf('.css') > -1)
+                filelist.push(dir + '/' + file);
+        }
+    });
+    return filelist;
+};
+
 // include_files
 gulp.task('inc', function() {
     console.log(walkSync('app'));
 
     gulp.src('index.dev.html')
         .pipe(htmlreplace({
-            'css': getRelativePath(mainBowerFiles('**/*.css')),
+            'css': getRelativePath(mainBowerFiles('**/*.css').concat(walkSyncScc('css'))),
             'js': getRelativePath(mainBowerFiles('**/*.js').concat(walkSync('app').reverse()))
         }))
         .pipe(rename('./index.html'))

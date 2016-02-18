@@ -1,0 +1,26 @@
+<!-- @namespace GamesController -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div>
+                <md-button ng-click="$ctrl.create($event)" class="md-raised md-primary">
+                    Create Game
+                </md-button>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <md-list ng-cloak ng-repeat="game in $ctrl.gamesList track by $index">
+                <md-subheader class="md-no-sticky">
+                    <strong>{{game.name}} </strong>
+                    Created by {{game.createdBy.displayName}} {{game.date | date:"MM/dd/yyyy 'at' h:mma"}}
+                </md-subheader>
+                <md-list-item ng-repeat="player in game.players track by $index" ng-click="">
+                    <!--<img alt="{{ person.name }}" ng-src="{{ person.img }}" class="md-avatar" />-->
+                    <p>{{player.displayName}}</p>
+                    <md-icon md-svg-icon="communication:messenger" ng-click="$ctrl.addPlayer(game)" aria-label="Open Chat" class="md-secondary md-hue-3" ng-class="{'md-primary': person.newMessage}">+</md-icon>
+                </md-list-item>
+                <md-divider></md-divider>
+            </md-list>
+        </div>
+    </div>
+</div>
