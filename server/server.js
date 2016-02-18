@@ -15,15 +15,15 @@ var io = require('socket.io')(server);
 
 app.use(cors());
 app.use(express.static('client'));
-//app.use(require('cookie-parser')());
-//app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('cookie-parser')());
+app.use(require('body-parser').json());
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 // dynamically include routes (Controller)
 fs.readdirSync('./server/controllers').forEach(function (file) {
-    require('./controllers/' + file).controller(app);
+    require('./controllers/' + file).controller(app, io);
 });
 
 io.on('connection', function (socket) {

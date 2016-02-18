@@ -5,7 +5,7 @@
         .module('socket.io')
         .provider('socket', socketProvider);
 
-    function socketProvider() { debugger
+    function socketProvider() {
         var provider = this;
         angular.extend(provider, {
             $get: ['$injector', function ($injector) {
@@ -14,20 +14,21 @@
         });
         var socket = io('http://localhost:3333');
 
-        socketService.$inject = ['$q'];
+        socketService.$inject = ['$q', '$rootScope'];
 
-        function socketService($q) { debugger
+        function socketService($q, $rootScope) {
             var service = this;
             angular.extend(service, {
                 on: on
             });
 
-            function on(eventName) { debugger
-                var deferred = $q.defer();
-                socket.on(eventName, function (data) { debugger
-                    deferred.resolve(data);
+            function on(eventName, callback) {
+                socket.on(eventName, function (data) {
+                    $rootScope.$apply(function () {
+                        callback(data);
+                    });
                 });
-                return deferred.promise;
+                return socket;
             }
         }
     }
