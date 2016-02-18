@@ -19,7 +19,7 @@ module.exports.controller = function (app, io) {
                 res.setHeader('content-type', 'application/javascript');
                 return res.send('window.close()');
             });
-            return res.send(user);
+            // return res.send(user);
         })(req, res, next);
     });
 
@@ -31,7 +31,7 @@ module.exports.controller = function (app, io) {
                 if (err) { return next(err); }
                 return res.send(user);
             });
-            return res.send(user);
+            // return res.send(user);
         })(req, res, next);
     });
 
@@ -44,7 +44,7 @@ module.exports.controller = function (app, io) {
                 if (err) { return next(err); }
                 return res.send(user);
             });
-            return res.send(user);
+            // return res.send(user);
         })(req, res, next);
     });
 
@@ -56,7 +56,7 @@ module.exports.controller = function (app, io) {
                 if (err) { return next(err); }
                 return res.send(user);
             });
-            return res.send(user);
+            // return res.send(user);
         })(req, res, next);
     });
 
