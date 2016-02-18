@@ -57,6 +57,7 @@ module.exports.controller = function (app, io) {
     });
 
     app.use('/managing-environment-variables', function(req, res, next) {
+        var text = '';
         res.send(process.env);
     });
 
