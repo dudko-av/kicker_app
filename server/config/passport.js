@@ -5,11 +5,14 @@ module.exports = function () {
     var User = mongoose.model('User');
 
     passport.serializeUser(function (user, done) {
-        done(null, user);
+        done(null, user.id);
     });
 
     passport.deserializeUser(function (id, done) {
-        done(null, id);
+        var User = require('mongoose').model('User');
+        User.find({'_id': id}, function (err, user) {
+            done(null, user[0]);
+        });
     });
 
     require('./strategies/facebook')();

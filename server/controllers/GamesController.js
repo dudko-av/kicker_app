@@ -1,51 +1,51 @@
 var mongoose = require('mongoose');
-module.exports.controller = function (app) {
 
-    /**
-     * a home page route
-     */
-    app.get('/game/create', function (req, res) {
+module.exports.controller = function (app, io) {
+
+    app.post('/games/create', function (req, res) {
         var Game = mongoose.model('Game');
         var Team = mongoose.model('Team');
-        var game = new Game({});
-        var team1 = new Team({});
-        var team2 = new Team({});
+        var game = new Game({
+            createdBy: req.user._id,
+            players: [req.user._id],
+            name: req.body.name
+        });
+        //var team1 = new Team({});
+        //var team2 = new Team({});
 
-        team1.teamName = "Blue";
-        team2.teamName = "Red";
+        //team1.teamName = "Blue";
+        //team2.teamName = "Red";
 
-        game.date = Date.now();
-        game.teams = [team1, team2];
-        // any logic goes here
-        game.save( function( err ){
-            if(!err){
-                console.log('Game saved!');
+        //game.date = Date.now();
+        //game.teams = [team1, team2];
+        //// any logic goes here
+        game.save(function (err) {
+            if (!err) {
+                io.emit('GAME_NEW', game);
+                res.send(game);
             }
         });
-        res.send(game);
     });
 
-    app.post('/game/addTeam', function (req, res) {
+    app.post('/games/addTeam', function (req, res) {
         var Game = mongoose.model('Game');
         var game = Game.findById(req.body.gameId);
         // any logic goes here
         res.send(game);
     });
 
-    app.post('/game/addPlayer', function (req, res) {
+    app.post('/games/addPlayer', function (req, res) {
         var Game = mongoose.model('Game');
-        var Team = mongoose.model('Team');
-        var Player = mongoose.model('User');
-
-        var game = Game.findById(req.body.gameId);
-        var team = Team.findById(req.body.teamId);
-        var player = Player.findById(req.body.playerId);
-        team.players.add(player);
-        // any logic goes here
-        res.send(game);
+        Game.findById(req.body._id, function (err, game) {
+            game.players.push(req.user._id);
+            game.save(function (err, game) {
+                io.emit('GAME_ADDED_PLAYER', game);
+                res.send(game);
+            });
+        });
     });
 
-    app.get('/game/addTeam', function (req, res) {
+    app.get('/games/addTeam', function (req, res) {
         var Game = mongoose.model('Game');
         var Team = mongoose.model('Team');
         var game = new Game({
@@ -56,12 +56,17 @@ module.exports.controller = function (app) {
         });
     });
 
-    /**
-     * About page route
-     */
-    app.get('/login', function (req, res) {
-        // any logic goes here
-        res.render('users/login')
+    app.use('/games/list', function (req, res) {
+        var Game = mongoose.model('Game');
+        Game.find(null, null, {
+            skip: 0, // Starting Row
+            limit: 10, // Ending Row
+            sort:{
+                date: -1 //Sort by Date Added DESC
+            }
+        }).populate('createdBy').populate('players').exec(function(err, games) {
+            res.send(games);
+        });
     });
 
 };
