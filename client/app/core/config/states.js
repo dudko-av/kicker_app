@@ -13,7 +13,11 @@
         $stateProvider
             .state('login', {
                 url: '/login',
-                template: '<login></login>'
+                views: {
+                    content: {
+                        template: '<login></login>'
+                    }
+                }
             });
     }
 

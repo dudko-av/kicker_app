@@ -6,10 +6,11 @@ var fs = require('fs');
 
 var db = mongoose();
 var app = express();
+require('./config/passport')();
 
 app.use(express.static('client'));
-//app.use(require('cookie-parser')());
-//app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());

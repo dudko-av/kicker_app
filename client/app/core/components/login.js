@@ -4,7 +4,7 @@
     angular
         .module('kicker_app')
         .component('login', {
-            template: '',
+            templateUrl: 'app/core/views/login.html',
             controller: 'AuthController'
         });
 

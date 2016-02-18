@@ -14,14 +14,13 @@ var replace = require('gulp-replace');
 //var runSequence = require('run-sequence');
 var fs = require('fs');
 var htmlreplace = require('gulp-html-replace');
-var gulpPath = require('gulp-path');
 var filenames = require("gulp-filenames");
 var recursive = require('recursive-readdir');
 var rename = require("gulp-rename");
 
 function getRelativePath(arr) {
     return arr.map(function (item) {
-        return item.replace(__dirname + '\\', '').replace(/\\/g, '/');
+        return item.replace(__dirname + '\\', '').replace(__dirname + '/', '').replace(/\\/g, '/');
     });
 }
 
@@ -34,7 +33,8 @@ var walkSync = function(dir, filelist) {
             filelist = walkSync(dir + '/' + file, filelist);
         }
         else {
-            filelist.push(dir + '/' + file);
+            if (file.indexOf('.js') > -1)
+                filelist.push(dir + '/' + file);
         }
     });
     return filelist;

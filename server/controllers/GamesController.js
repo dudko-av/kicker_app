@@ -7,15 +7,16 @@ module.exports.controller = function (app) {
     app.get('/game/create', function (req, res) {
         var Game = mongoose.model('Game');
         var game = new Game({
-            date: Date.now()
+            date: new Date()
         });
         // any logic goes here
-        game.save( function( err ){
+        game.save(function(err) {
             if(!err){
                 console.log('Game saved!');
+            } else {
+                res.send(game);
             }
         });
-        res.send(game);
     });
 
     app.post('/game/addTeam', function (req, res) {
