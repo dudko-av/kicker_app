@@ -1,5 +1,5 @@
 module.exports = {
-    db: process.env.OPENSHIFT_MONGODB_DB_URL + 'kicker_app',
+    db: process.env.OPENSHIFT_MONGODB_DB_URL + 'kickerapp',
     ip: process.env.OPENSHIFT_NODEJS_IP,
     port: process.env.OPENSHIFT_NODEJS_PORT,
     sessionSecret: 'devSessionSecret',
