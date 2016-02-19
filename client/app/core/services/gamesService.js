@@ -12,7 +12,8 @@
         angular.extend(service, {
             create: create,
             list: list,
-            addPlayer: addPlayer
+            addPlayer: addPlayer,
+            addScore: addScore
         });
 
         function create(game) {
@@ -34,6 +35,14 @@
         function addPlayer(game) {
             return $injector.invoke(['$http', function ($http) {
                 return $http.post('games/addPlayer', game).then(function (res) {
+                    return res.data;
+                })
+            }]);
+        }
+
+        function addScore(team) {
+            return $injector.invoke(['$http', function ($http) {
+                return $http.post('games/addScore', team).then(function (res) {
                     return res.data;
                 })
             }]);

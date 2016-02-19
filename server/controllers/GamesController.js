@@ -20,10 +20,10 @@ module.exports.controller = function (app, io) {
         //game.teams = [team1, team2];
         //// any logic goes here
         game.save(function (err) {
-            if (!err) {
+            Game.findById(game._id).populate('createdBy players').exec(function (err, game) {
                 io.emit('GAME_NEW', game);
                 res.send(game);
-            }
+            });
         });
     });
 
@@ -36,11 +36,24 @@ module.exports.controller = function (app, io) {
 
     app.post('/games/addPlayer', function (req, res) {
         var Game = mongoose.model('Game');
+        var Team = mongoose.model('Team');
         Game.findById(req.body._id, function (err, game) {
-            game.players.push(req.user._id);
+            if (game.players.length < 4) game.players.push(req.user._id);
+            if (game.players.length == 4) {
+                var random = Math.floor(Math.random() * 3);
+                var team2 = game.players.filter(function (item, index) {
+                    return index !== 0 && index !== random;
+                });
+                game.teams = [
+                    {players: [game.players[0], game.players[random]]},
+                    {players: team2}
+                ];
+            }
             game.save(function (err, game) {
-                io.emit('GAME_ADDED_PLAYER', game);
-                res.send(game);
+                Game.findById(game._id).populate('createdBy players teams.players').exec(function (err, game) {
+                    io.emit('GAME_ADDED_PLAYER', game);
+                    res.send(game);
+                });
             });
         });
     });
@@ -64,9 +77,29 @@ module.exports.controller = function (app, io) {
             sort:{
                 date: -1 //Sort by Date Added DESC
             }
-        }).populate('createdBy').populate('players').exec(function(err, games) {
+        }).populate('createdBy players teams.players').exec(function(err, games) {
             res.send(games);
         });
+    });
+
+    app.use('/games/addScore', function (req, res) {
+        var Game = mongoose.model('Game');
+        Game.findOne({'_id': req.body.gameId}, {'teams': {$elemMatch: {'_id': req.body.teamId}}})
+            .populate('createdBy players teams.players')
+            .exec(function (err, game) {
+                game.teams[0].scores += 1;
+                req.body.scores = game.teams[0].scores;
+                Game.update(
+                    {_id: req.body.gameId, "teams._id": req.body.teamId},
+                    {$set: {"teams.$.scores": game.teams[0].scores}},
+                    {upsert: true},
+                    function (err, updated) {
+                        io.emit('GAME_SCORED', req.body);
+                        res.send(game);
+                    }
+                );
+            });
+
     });
 
 };
