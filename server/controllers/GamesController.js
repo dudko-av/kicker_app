@@ -87,10 +87,8 @@ module.exports.controller = function (app, io) {
         Game.findOne({'_id': req.body.gameId}, {'teams': {$elemMatch: {'_id': req.body.teamId}}})
             .populate('createdBy players teams.players')
             .exec(function (err, game) {
-                console.log(game.teams[0].scores);
                 game.teams[0].scores += 1;
                 req.body.scores = game.teams[0].scores;
-                console.log(game.teams[0].scores);
                 Game.update(
                     {_id: req.body.gameId, "teams._id": req.body.teamId},
                     {$set: {"teams.$.scores": game.teams[0].scores}},
