@@ -1,4 +1,5 @@
 var passport = require('passport');
+var mongoose = require('mongoose');
 
 module.exports.controller = function (app, io) {
     app.use('/auth/user',function(req, res, next) {
@@ -60,8 +61,30 @@ module.exports.controller = function (app, io) {
         })(req, res, next);
     });
 
+    app.use('/auth/android', function(req, res, next) {
+        var profile = req.body;
+        var User = require('mongoose').model('User');
+        User.find({provider: profile.provider, providerId: profile.providerId}, function (err, user) {
+            if (user.length) {
+                // done(null, user[0]);
+                req.logIn(user[0], function(err) {
+                    if (err) { return next(err); }
+                    return res.send(user);
+                });
+            } else {
+                var newUser = new User(profile);
+                newUser.save(function (err, user) {
+                    // done(null, newUser);
+                    req.logIn(user, function(err) {
+                        if (err) { return next(err); }
+                        return res.send(user);
+                    });
+                });
+            }
+        });
+    });
+
     app.use('/managing-environment-variables', function(req, res, next) {
         res.send(process.env);
     });
-
 };
