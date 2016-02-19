@@ -9,16 +9,41 @@
             </div>
         </div>
         <div class="col-lg-12">
-            <md-list ng-cloak ng-repeat="game in $ctrl.gamesList track by $index">
+            <md-list ng-cloak ng-repeat="game in $ctrl.gamesList track by $index" class="well well-sm">
                 <md-subheader class="md-no-sticky">
+                    <div ng-show="$ctrl.showButton('addPlayer', game)" style="position: absolute; right: 0; top: 0; margin-top: -16px; margin-right: -16px;">
+                        <md-button ng-click="$ctrl.addPlayer(game)">
+                            <md-icon>add_circle_outline</md-icon>
+                        </md-button>
+                    </div>
                     <strong>{{game.name}} </strong>
                     Created by {{game.createdBy.displayName}} {{game.date | date:"MM/dd/yyyy 'at' h:mma"}}
                 </md-subheader>
-                <md-list-item ng-repeat="player in game.players track by $index" ng-click="">
-                    <!--<img alt="{{ person.name }}" ng-src="{{ person.img }}" class="md-avatar" />-->
+                <md-list-item ng-show="!game.teams.length" ng-repeat="player in game.players track by $index" ng-click="">
+                    <img alt="" src="http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png" class="md-avatar" />
                     <p>{{player.displayName}}</p>
-                    <md-icon md-svg-icon="communication:messenger" ng-click="$ctrl.addPlayer(game)" aria-label="Open Chat" class="md-secondary md-hue-3" ng-class="{'md-primary': person.newMessage}">+</md-icon>
                 </md-list-item>
+
+                <!-- TODO -->
+                <div class="row" ng-show="game.teams.length">
+                    <div class="col-lg-5">
+                        <md-list-item ng-repeat="player in game.teams[0].players track by $index" ng-click="$ctrl.addScore(game._id, game.teams[0]._id)">
+                            <img alt="" src="http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png" class="md-avatar" />
+                            <p>{{player.displayName}}</p>
+                        </md-list-item>
+                    </div>
+                    <div class="col-lg-2 text-center text-capitalize">
+                        <div class="h3">VS</div>
+                        <div class="h3">{{game.teams[0].scores}} : {{game.teams[1].scores}}</div>
+                    </div>
+                    <div class="col-lg-5">
+                        <md-list-item ng-repeat="player in game.teams[1].players track by $index" ng-click="$ctrl.addScore(game._id, game.teams[1]._id)">
+                            <img alt="" src="http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png" class="md-avatar" />
+                            <p>{{player.displayName}}</p>
+                        </md-list-item>
+                    </div>
+                </div>
+
                 <md-divider></md-divider>
             </md-list>
         </div>

@@ -11,7 +11,9 @@
         var ctrl = this;
         angular.extend(ctrl, {
             create: create,
-            addPlayer: addPlayer
+            addPlayer: addPlayer,
+            addScore: addScore,
+            showButton: showButton
         });
 
         init();
@@ -29,6 +31,19 @@
                 angular.forEach(ctrl.gamesList, function (item) {
                     if (item._id === game._id) {
                         angular.extend(item, game);
+                    }
+                });
+            });
+
+            socket.on('GAME_SCORED', function (data) {
+                angular.forEach(ctrl.gamesList, function (item) {
+                    if (item._id === data.gameId) {
+                        item.teams.map(function (team) {
+                            if (team._id === data.teamId) {
+                                team.scores = data.scores;
+                            }
+                            return team;
+                        });
                     }
                 });
             });
@@ -54,12 +69,27 @@
         }
 
         function addPlayer(game) {
-            gamesService.addPlayer(game).then(function (res) { debugger
-
+            gamesService.addPlayer(game).then(function (res) {
+                console.log(res);
             });
         }
 
+        function addScore(gameId, teamId) {
+            gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {
+                console.log(res);
+            });
+        }
 
+        function showButton(name, game) { return true;
+            return $injector.invoke(['$rootScope', function ($rootScope) {
+                switch (name) {
+                    case 'addPlayer': return !game.players.filter(function (user) {
+                        return $rootScope.user._id === user._id;
+                    }).length;
+                    break;
+                }
+            }]);
+        }
     }
 
 })();

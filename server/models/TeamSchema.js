@@ -1,12 +1,10 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-//require('./UserSchema');
-//var userSchema = mongoose.model('User').schema;
-
 var TeamSchema = new Schema({
     teamName: String,
-    players: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+    players: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    scores: {type: Number, 'default': 0}
 });
 
 module.exports = mongoose.model('Team', TeamSchema);
