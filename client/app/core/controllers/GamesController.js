@@ -80,7 +80,7 @@
             });
         }
 
-        function showButton(name, game) { return true;
+        function showButton(name, game) { //return true;
             return $injector.invoke(['$rootScope', function ($rootScope) {
                 switch (name) {
                     case 'addPlayer': return !game.players.filter(function (user) {
