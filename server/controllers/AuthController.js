@@ -69,7 +69,7 @@ module.exports.controller = function (app, io) {
                 // done(null, user[0]);
                 req.logIn(user[0], function(err) {
                     if (err) { return next(err); }
-                    return res.send(user);
+                    return res.send(user[0]);
                 });
             } else {
                 var newUser = new User(profile);
