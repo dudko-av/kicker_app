@@ -37,10 +37,10 @@ module.exports.controller = function (app, io) {
     app.post('/games/addPlayer', function (req, res) {
         var Game = mongoose.model('Game');
         var Team = mongoose.model('Team');
-        Game.findById(req.body._id, function (err, game) {
-            if (game.players.length < 4) game.players.push(req.user._id);
+        Game.findById(req.body.game._id, function (err, game) {
+            if (game.players.length < 4) game.players.push(req.body.playerId || req.user._id);
             if (game.players.length == 4) {
-                var random = Math.floor(Math.random() * 3);
+                var random = Math.floor(Math.random() * 3) + 1;
                 var team2 = game.players.filter(function (item, index) {
                     return index !== 0 && index !== random;
                 });
@@ -70,6 +70,7 @@ module.exports.controller = function (app, io) {
     });
 
     app.use('/games/list', function (req, res) {
+        if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
         Game.find(null, null, {
             skip: 0, // Starting Row
@@ -101,5 +102,18 @@ module.exports.controller = function (app, io) {
             });
 
     });
+
+    app.use('/games/players', function (req, res) {
+        if (!authorized(req, res)) return;
+        var User = mongoose.model('User');
+        User.find(function (err, players) {
+            res.send(players);
+        });
+    });
+
+    function authorized(req, res) {
+        if (!req.user) res.sendStatus(401);
+        return req.user ? true : false;
+    }
 
 };

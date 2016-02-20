@@ -9,7 +9,7 @@
     config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
     function config($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.when('/', '/tournaments');
+        $urlRouterProvider.when('/', '');
 
         $stateProvider
             .state('index', {
@@ -26,14 +26,13 @@
                 },
                 resolve: {
                     user: ['$rootScope', '$state', '$q', 'auth', function ($rootScope, $state, $q, auth) {
-                        $q.when($rootScope.user || function () {
+                        return $q.when($rootScope.user || function () {
                                 return auth.user().then(function (user) {
                                     return $rootScope.user = user;
                                 }, function () {
                                     $state.go('login');
                                 });
                             }());
-
                     }]
                 }
             })

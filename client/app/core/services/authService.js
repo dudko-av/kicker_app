@@ -15,9 +15,9 @@
             }]
         });
 
-        authService.$inject = ['$q', '$http', '$rootScope', '$state'];
+        authService.$inject = ['$q', '$http', '$rootScope', '$state', 'socket'];
 
-        function authService($q, $http, $rootScope, $state) {
+        function authService($q, $http, $rootScope, $state, socket) {
             var service = this;
             angular.extend(service, {
                 login: login,
@@ -27,12 +27,12 @@
 
             function login(provider) {
                 var deferred = $q.defer();
-                var authWindow = window.open('auth/' + provider, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
-                authWindow.onunload = function () {
+                window.open('/auth/' + provider + '?socketId=' + socket.client.id, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=50, left=50, width=599, height=599");
+                socket.on('USER_AUTHENTICATED', function () {
                     user().then(function (user) {
                         deferred.resolve(user);
                     });
-                };
+                });
                 return deferred.promise;
             }
 

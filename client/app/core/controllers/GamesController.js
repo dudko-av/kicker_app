@@ -5,9 +5,9 @@
         .module('kicker_app')
         .controller('GamesController', GamesController);
 
-    GamesController.$inject = ['$injector', 'gamesService', 'socket'];
+    GamesController.$inject = ['$injector', '$mdToast', 'gamesService', 'socket'];
 
-    function GamesController($injector, gamesService, socket) {
+    function GamesController($injector, $mdToast, gamesService, socket) {
         var ctrl = this;
         angular.extend(ctrl, {
             create: create,
@@ -21,6 +21,9 @@
         function init() {
             gamesService.list().then(function (gamesList) {
                 ctrl.gamesList = gamesList;
+            });
+            gamesService.players().then(function (playersList) {
+                ctrl.playersList = playersList;
             });
 
             socket.on('GAME_NEW', function (game) {
@@ -61,26 +64,25 @@
                         clickOutsideToClose: true
                     })
                     .then(function (game) {
+                        angular.extend(game || {}, {date: new Date()});
                         gamesService.create(game).then(function (res) {
-
+                            showToast('Game created');
                         });
                     }, function () {});
             }]);
         }
 
-        function addPlayer(game) {
-            gamesService.addPlayer(game).then(function (res) {
-                console.log(res);
+        function addPlayer(game, playerId) {
+            gamesService.addPlayer({game: game, playerId: playerId}).then(function (res) {
+                showToast('Player added');
             });
         }
 
         function addScore(gameId, teamId) {
-            gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {
-                console.log(res);
-            });
+            gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {});
         }
 
-        function showButton(name, game) { return true;
+        function showButton(name, game) {
             return $injector.invoke(['$rootScope', function ($rootScope) {
                 switch (name) {
                     case 'addPlayer': return !game.players.filter(function (user) {
@@ -89,6 +91,15 @@
                     break;
                 }
             }]);
+        }
+
+        function showToast(message) {
+            $mdToast.show($mdToast.simple()
+                .textContent(message)
+                .parent(angular.element('.toast-parent')[0])
+                .hideDelay(1500)
+                .position('top right')
+            );
         }
     }
 
