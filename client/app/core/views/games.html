@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <md-list ng-cloak ng-repeat="game in $ctrl.gamesList track by $index" class="well well-sm">
                 <md-subheader class="md-no-sticky">
-                    <div style="position: absolute; right: 0; top: 0; margin-top: -14px; margin-right: -14px;">
+                    <div style="position: absolute; right: 0; top: 0; margin-top: -16px; margin-right: -16px;">
                         <md-button ng-click="$ctrl.randomPlayers(game)" class="md-icon-button">
                             <md-icon>autorenew</md-icon>
                         </md-button>
@@ -29,6 +29,14 @@
                         <md-button ng-show="$ctrl.addPlayer.show(game)" ng-click="$ctrl.addPlayer(game)" class="md-icon-button">
                             <md-icon>person_add</md-icon>
                         </md-button>
+                        <md-input-container ng-show="game.players.length == 4" style="margin-bottom: 0; margin-top: -7px;">
+                            <md-select ng-model="game.wins">
+                                <md-option ng-repeat="item in [10,9,8,7,6,5,4,3,2,1]" value="{{item}}">
+                                    {{item}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-button ng-show="game.players.length == 4">play</md-button>
                     </div>
                     <strong>{{game.name}} </strong>
                     Created by {{game.createdBy.displayName}} {{game.date | date:"MM/dd/yyyy 'at' h:mma"}}
