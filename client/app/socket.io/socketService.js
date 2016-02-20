@@ -19,6 +19,7 @@
         function socketService($q, $rootScope) {
             var service = this;
             angular.extend(service, {
+                client: socket,
                 on: on
             });
 

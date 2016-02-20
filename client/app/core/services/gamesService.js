@@ -13,7 +13,8 @@
             create: create,
             list: list,
             addPlayer: addPlayer,
-            addScore: addScore
+            addScore: addScore,
+            players: players
         });
 
         function create(game) {
@@ -43,6 +44,14 @@
         function addScore(team) {
             return $injector.invoke(['$http', function ($http) {
                 return $http.post('games/addScore', team).then(function (res) {
+                    return res.data;
+                })
+            }]);
+        }
+
+        function players() {
+            return $injector.invoke(['$http', function ($http) {
+                return $http.post('games/players', {}).then(function (res) {
                     return res.data;
                 })
             }]);

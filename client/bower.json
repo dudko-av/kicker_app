@@ -20,11 +20,16 @@
     "socket.io-client": {
       "main": "socket.io.js"
     },
+    "angular": {
+      "dependencies": {
+        "jquery": "^1.0.0"
+      }
+    },
     "bootstrap": {
       "main": "dist/css/bootstrap.min.css"
     },
     "jquery": {
-      "ignore": true
+      "ignore": false
     }
   }
 }

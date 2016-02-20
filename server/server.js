@@ -26,8 +26,9 @@ fs.readdirSync('./server/controllers').forEach(function (file) {
     require('./controllers/' + file).controller(app, io);
 });
 
-io.on('connection', function (socket) {
+io.on('connection', function (client) {
     console.log('new socket io connection');
+    console.log('connection id ', client.id);
 });
 
 // server.listen(3333);

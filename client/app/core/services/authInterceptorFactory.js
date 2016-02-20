@@ -2,16 +2,17 @@
     'use strict';
 
     angular
-        .module('ekasud.core')
-        .factory('authInterceptor', authInterceptorFactory)
-        .value('SESSION_ERROR', 'com.ibm.websphere.servlet.session.UnauthorizedSessionRequestException');
+        .module('kicker_app')
+        .factory('authInterceptor', authInterceptorFactory);
 
-    authInterceptorFactory.$inject = ['$q', 'auth', 'SESSION_ERROR'];
+    authInterceptorFactory.$inject = ['$q', '$injector'];
 
-    function authInterceptorFactory($q, auth, SESSION_ERROR) {
+    function authInterceptorFactory($q, $injector) {
+        var auth = null;
         return {
-            responseError: function (err) { //debugger
+            responseError: function (err) {
                 if (err.status === 401)  {
+                    auth = auth || $injector.get('auth');
                     auth.logout();
                 }
                 return $q.reject(err);

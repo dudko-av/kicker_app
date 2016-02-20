@@ -1,3 +1,35 @@
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:600);
+
 body {
     padding-top: 70px;
+    font-family: 'Titillium Web', sans-serif;
 }
+/**/
+.team-blue {
+    background-color: #E4EFFF;
+    cursor: pointer;
+}
+.team-red {
+    background-color: #FFE2E2;
+    cursor: pointer;
+}
+/**/
+.no-padding {
+    padding: 0!important;
+} .no-padding-v {
+    padding-left: 0!important;
+    padding-right: 0!important;
+} .no-padding-h {
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+}
+.no-margin {
+    margin: 0!important;
+} .no-margin-v {
+    margin-left: 0!important;
+    margin-right: 0!important;
+} .no-margin-h {
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+}
+/**/
