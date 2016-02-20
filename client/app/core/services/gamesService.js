@@ -14,6 +14,7 @@
             list: list,
             addPlayer: addPlayer,
             addScore: addScore,
+            randomPlayers: randomPlayers,
             players: players
         });
 
@@ -52,6 +53,14 @@
         function players() {
             return $injector.invoke(['$http', function ($http) {
                 return $http.post('games/players', {}).then(function (res) {
+                    return res.data;
+                })
+            }]);
+        }
+
+        function randomPlayers(game) {
+            return $injector.invoke(['$http', function ($http) {
+                return $http.post('games/randomPlayers', game).then(function (res) {
                     return res.data;
                 })
             }]);

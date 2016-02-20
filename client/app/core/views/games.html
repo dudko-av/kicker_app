@@ -11,7 +11,10 @@
         <div class="col-lg-12">
             <md-list ng-cloak ng-repeat="game in $ctrl.gamesList track by $index" class="well well-sm">
                 <md-subheader class="md-no-sticky">
-                    <div style="position: absolute; right: 0; top: 0; margin-top: -16px; margin-right: -16px;">
+                    <div style="position: absolute; right: 0; top: 0; margin-top: -14px; margin-right: -14px;">
+                        <md-button ng-click="$ctrl.randomPlayers(game)" class="md-icon-button">
+                            <md-icon>autorenew</md-icon>
+                        </md-button>
                         <md-menu md-position-mode="target-right target">
                             <!-- Trigger element is a md-button with an icon -->
                             <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">

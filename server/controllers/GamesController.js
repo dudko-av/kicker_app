@@ -111,6 +111,30 @@ module.exports.controller = function (app, io) {
         });
     });
 
+    app.use('/games/randomPlayers', function (req, res) {
+        if (!authorized(req, res)) return;
+        var Game = mongoose.model('Game');
+        var newTeams = randomPlayers(req.body.players);
+        Game.findOneAndUpdate({'_id': req.body._id}, {teams: newTeams}, function (err, game) {
+            Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
+                io.emit('GAME_UPDATE', game);
+                res.send(game);
+            });
+        });
+    });
+
+    function randomPlayers(playersLIst) {
+        var playersStack = playersLIst.map(function (item) { return item._id || item; });
+        var newTeams = [];
+        var random = function () {
+            return playersStack.splice(Math.floor(Math.random() * playersStack.length - 1), 1);
+        };
+        while (playersStack.length > 1) {
+            newTeams.push({players: [random(), random()]});
+        }
+        return newTeams;
+    }
+
     function authorized(req, res) {
         if (!req.user) res.sendStatus(401);
         return req.user ? true : false;

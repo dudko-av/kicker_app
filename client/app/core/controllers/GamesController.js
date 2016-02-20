@@ -13,6 +13,7 @@
             create: create,
             addPlayer: addPlayer,
             addScore: addScore,
+            randomPlayers: randomPlayers,
             showButton: showButton
         });
 
@@ -31,6 +32,14 @@
             });
 
             socket.on('GAME_ADDED_PLAYER', function (game) {
+                angular.forEach(ctrl.gamesList, function (item) {
+                    if (item._id === game._id) {
+                        angular.extend(item, game);
+                    }
+                });
+            });
+
+            socket.on('GAME_UPDATE', function (game) {
                 angular.forEach(ctrl.gamesList, function (item) {
                     if (item._id === game._id) {
                         angular.extend(item, game);
@@ -82,6 +91,12 @@
             gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {});
         }
 
+        function randomPlayers(game) {
+            gamesService.randomPlayers(game).then(function (res) {
+                showToast('Players randomized');
+            });
+        }
+
         function showButton(name, game) {
             return $injector.invoke(['$rootScope', function ($rootScope) {
                 switch (name) {
@@ -97,7 +112,7 @@
             $mdToast.show($mdToast.simple()
                 .textContent(message)
                 .parent(angular.element('.toast-parent')[0])
-                .hideDelay(1500)
+                .hideDelay(700)
                 .position('top right')
             );
         }
