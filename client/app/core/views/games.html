@@ -30,7 +30,7 @@
                             <md-icon>person_add</md-icon>
                         </md-button>
                         <md-input-container ng-show="game.players.length == 4" style="margin-bottom: 0; margin-top: -7px;">
-                            <md-select ng-model="game.wins">
+                            <md-select aria-label="" ng-model="game.wins">
                                 <md-option ng-repeat="item in [10,9,8,7,6,5,4,3,2,1]" value="{{item}}">
                                     {{item}}
                                 </md-option>

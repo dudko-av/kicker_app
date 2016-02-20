@@ -115,12 +115,16 @@
         }
 
         function showToast(message) {
+            var toastParent = angular.element('.toast-parent');
+            toastParent.css({height: '60px'});
             $mdToast.show($mdToast.simple()
                 .textContent(message)
-                .parent(angular.element('.toast-parent')[0])
+                .parent(toastParent[0])
                 .hideDelay(700)
                 .position('top right')
-            );
+            ).then(function () {
+                toastParent.css({height: 0});
+            });
         }
     }
 
