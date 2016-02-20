@@ -5,9 +5,9 @@
         .module('kicker_app')
         .controller('GamesController', GamesController);
 
-    GamesController.$inject = ['$injector', '$mdToast', 'gamesService', 'socket'];
+    GamesController.$inject = ['$rootScope', '$injector', '$mdToast', 'gamesService', 'socket'];
 
-    function GamesController($injector, $mdToast, gamesService, socket) {
+    function GamesController($rootScope, $injector, $mdToast, gamesService, socket) {
         var ctrl = this;
         angular.extend(ctrl, {
             create: create,
@@ -86,6 +86,12 @@
                 showToast('Player added');
             });
         }
+        addPlayer.show = function (game) {
+            if (game.players.length === 4) return false;
+            return !game.players.filter(function (user) {
+                return $rootScope.user._id === user._id;
+            }).length;
+        };
 
         function addScore(gameId, teamId) {
             gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {});

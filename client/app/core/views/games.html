@@ -15,7 +15,7 @@
                         <md-button ng-click="$ctrl.randomPlayers(game)" class="md-icon-button">
                             <md-icon>autorenew</md-icon>
                         </md-button>
-                        <md-menu md-position-mode="target-right target">
+                        <md-menu md-position-mode="target-right target" ng-show="game.players.length < 4">
                             <!-- Trigger element is a md-button with an icon -->
                             <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">
                                 <md-icon>group_add</md-icon>
@@ -26,7 +26,7 @@
                                 </md-menu-item>
                             </md-menu-content>
                         </md-menu>
-                        <md-button ng-click="$ctrl.addPlayer(game)" class="md-icon-button">
+                        <md-button ng-show="$ctrl.addPlayer.show(game)" ng-click="$ctrl.addPlayer(game)" class="md-icon-button">
                             <md-icon>person_add</md-icon>
                         </md-button>
                     </div>
@@ -35,7 +35,7 @@
                 </md-subheader>
 
                 <md-list-item ng-show="!game.teams.length" ng-repeat="player in game.players track by $index" ng-click="">
-                    <img alt="" src="http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png" class="md-avatar" />
+                    <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
                     <p>{{player.displayName}}</p>
                 </md-list-item>
 
@@ -44,7 +44,7 @@
                     <div class="col-lg-5">
                         <md-list ng-click="$ctrl.addScore(game._id, game.teams[0]._id)" class="team-blue">
                             <md-list-item ng-repeat="player in game.teams[0].players track by $index">
-                                <img alt="" src="http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png" class="md-avatar" />
+                                <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
                                 <p>{{player.displayName}}</p>
                             </md-list-item>
                         </md-list>
@@ -56,7 +56,7 @@
                     <div class="col-lg-5">
                         <md-list ng-click="$ctrl.addScore(game._id, game.teams[1]._id)" class="team-red">
                             <md-list-item  ng-repeat="player in game.teams[1].players track by $index">
-                                <img alt="" src="http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png" class="md-avatar" />
+                                <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
                                 <p>{{player.displayName}}</p>
                             </md-list-item>
                         </md-list>
