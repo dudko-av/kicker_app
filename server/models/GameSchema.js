@@ -8,6 +8,7 @@ var GameSchema = new Schema({
     date:       {'type': Date, 'default': Date.now},
     createdBy:  {'type': Schema.Types.ObjectId, ref: 'User'},
     name:       String,
+    wins:       {'type': Number, 'default': 10},
     players:    [{'type' :Schema.Types.ObjectId, ref: 'User'}],
     teams:      [teamSchema]
 });

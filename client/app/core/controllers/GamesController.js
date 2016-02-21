@@ -5,14 +5,15 @@
         .module('kicker_app')
         .controller('GamesController', GamesController);
 
-    GamesController.$inject = ['$injector', '$mdToast', 'gamesService', 'socket'];
+    GamesController.$inject = ['$rootScope', '$injector', '$mdToast', 'gamesService', 'socket'];
 
-    function GamesController($injector, $mdToast, gamesService, socket) {
+    function GamesController($rootScope, $injector, $mdToast, gamesService, socket) {
         var ctrl = this;
         angular.extend(ctrl, {
             create: create,
             addPlayer: addPlayer,
             addScore: addScore,
+            randomPlayers: randomPlayers,
             showButton: showButton
         });
 
@@ -31,6 +32,14 @@
             });
 
             socket.on('GAME_ADDED_PLAYER', function (game) {
+                angular.forEach(ctrl.gamesList, function (item) {
+                    if (item._id === game._id) {
+                        angular.extend(item, game);
+                    }
+                });
+            });
+
+            socket.on('GAME_UPDATE', function (game) {
                 angular.forEach(ctrl.gamesList, function (item) {
                     if (item._id === game._id) {
                         angular.extend(item, game);
@@ -77,9 +86,21 @@
                 showToast('Player added');
             });
         }
+        addPlayer.show = function (game) {
+            if (game.players.length === 4) return false;
+            return !game.players.filter(function (user) {
+                return $rootScope.user._id === user._id;
+            }).length;
+        };
 
         function addScore(gameId, teamId) {
             gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {});
+        }
+
+        function randomPlayers(game) {
+            gamesService.randomPlayers(game).then(function (res) {
+                showToast('Players randomized');
+            });
         }
 
         function showButton(name, game) {
@@ -94,12 +115,16 @@
         }
 
         function showToast(message) {
+            var toastParent = angular.element('.toast-parent');
+            toastParent.css({height: '60px'});
             $mdToast.show($mdToast.simple()
                 .textContent(message)
-                .parent(angular.element('.toast-parent')[0])
-                .hideDelay(1500)
+                .parent(toastParent[0])
+                .hideDelay(700)
                 .position('top right')
-            );
+            ).then(function () {
+                toastParent.css({height: 0});
+            });
         }
     }
 

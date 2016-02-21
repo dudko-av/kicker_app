@@ -62,6 +62,19 @@
                     }]
                 }
             })
+            .state('index.profile', {
+                url: '/profile',
+                views: {
+                    'content@': {
+                        template: '<profile></profile>'
+                    }
+                },
+                resolve: {
+                    auth: ['user', function (user) {
+                        return user;
+                    }]
+                }
+            })
             .state('login', {
                 url: '/login',
                 views: {

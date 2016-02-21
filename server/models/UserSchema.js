@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
 
 var UserSchema = new Schema({
     displayName: String,
+    image: {type: String, 'default': 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'},
     provider: String,
     providerId: String,
     games: Number,
