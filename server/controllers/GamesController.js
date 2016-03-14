@@ -123,16 +123,38 @@ module.exports.controller = function (app, io) {
         });
     });
 
-    function randomPlayers(playersLIst) {
-        var playersStack = playersLIst.map(function (item) { return item._id || item; });
+    function randomPlayers(playersList) {
+        var playersStack = playersList.map(function (item) { return item._id || item; });
         var newTeams = [];
         var random = function () {
-            return playersStack.splice(Math.floor(Math.random() * playersStack.length - 1), 1);
+            return playersStack.splice(Math.floor(Math.random() * playersStack.length), 1);
         };
         while (playersStack.length > 1) {
             newTeams.push({players: [random(), random()]});
         }
         return newTeams;
+    }
+
+    function randomPlayers2(playersList) {
+        var playerMap = {};
+        for (var i = 0; i < playersList.length; i++) {
+            playerMap[Math.random()] = playersList[i];
+        }
+        var keyList = [];
+        for (var key in playerMap) {
+            keyList.push(key);
+        }
+        keyList.sort();
+        var generatedTeams = [];
+        for (var i = 0; i < Math.floor(keyList.length / 4); i++) {
+            console.log('Team #' + i);
+            var playerIndex = i * 4;
+            console.log('   Player1: ' + playerMap[keyList[playerIndex]].displayName);
+            console.log('   Player2: ' + playerMap[keyList[playerIndex+1]].displayName);
+            console.log('   Player3: ' + playerMap[keyList[playerIndex+2]].displayName);
+            console.log('   Player4: ' + playerMap[keyList[playerIndex+3]].displayName);
+
+        }
     }
 
     function authorized(req, res) {
