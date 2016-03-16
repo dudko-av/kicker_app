@@ -4,7 +4,7 @@ module.exports.controller = function (app, io) {
 
     app.post('/game/get', function(req, res) {
         var Game = mongoose.model('Game');
-        Game.findById(req.body.id, function (err, game) {
+        Game.findById(req.body._id, function (err, game) {
             res.send(game);
         });
     });
