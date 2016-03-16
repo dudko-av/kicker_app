@@ -2,6 +2,13 @@ var mongoose = require('mongoose');
 
 module.exports.controller = function (app, io) {
 
+    app.post('/game/get', function(req, res) {
+        var Game = mongoose.model('Game');
+        Game.findById(req.body.id).exec(function (err, game) {
+            res.send(game);
+        });
+    });
+
     app.post('/games/create', function (req, res) {
         var Game = mongoose.model('Game');
         var Team = mongoose.model('Team');
