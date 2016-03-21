@@ -114,7 +114,9 @@ module.exports.controller = function (app, io) {
     app.use('/games/players', function (req, res) {
         if (!authorized(req, res)) return;
         var game  = req.body.game;
-        res.send(getPlayersForGame(game));
+        getPlayersForGame(game, function (players) {
+            res.send(players);
+        });
     });
 
     /**
@@ -122,20 +124,19 @@ module.exports.controller = function (app, io) {
      * Except that already in game
      * @param game
      */
-    function getPlayersForGame(game) {
+    function getPlayersForGame(game, callback) {
         var Game = mongoose.model('Game');
         var User = mongoose.model('User');
-        var curPlayers = [];
-        if (game && game.players && game.players.length > 0) {
-            curPlayers = game.players;
-        }
-        if (curPlayers.length > 0) {
-            User.find({ players : { $nin: curPlayers } }).exec(function (err, players) {
-                return players;
+        if (game) {
+            Game.findById(game._id, function(err, game){
+                var curPlayersId = game.players;
+                User.find({ _id : { $nin: curPlayersId } }).exec(function (err, players) {
+                    callback(players);
+                });
             });
         } else {
             User.find(function (err, players) {
-                return players;
+                callback(players);
             });
         }
     }
