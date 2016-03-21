@@ -129,9 +129,15 @@ module.exports.controller = function (app, io) {
         if (game && game.players && game.players.length > 0) {
             curPlayers = game.players;
         }
-        User.find({ players : { $nin: curPlayers } }).exec(function (err, players) {
-            return players;
-        });
+        if (curPlayers.length > 0) {
+            User.find({ players : { $nin: curPlayers } }).exec(function (err, players) {
+                return players;
+            });
+        } else {
+            User.find(function (err, players) {
+                return players;
+            });
+        }
     }
 
     app.use('/games/randomPlayers', function (req, res) {
