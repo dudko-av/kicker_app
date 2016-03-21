@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 module.exports.controller = function (app, io) {
 
     app.post('/game/get', function(req, res) {
+        if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
         Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, games) {
             res.send(games);
@@ -112,11 +113,26 @@ module.exports.controller = function (app, io) {
 
     app.use('/games/players', function (req, res) {
         if (!authorized(req, res)) return;
-        var User = mongoose.model('User');
-        User.find(function (err, players) {
-            res.send(players);
-        });
+        var game  = req.body.game;
+        res.send(getPlayersForGame(game));
     });
+
+    /**
+     * Getting players for game
+     * Except that already in game
+     * @param game
+     */
+    function getPlayersForGame(game) {
+        var Game = mongoose.model('Game');
+        var User = mongoose.model('User');
+        var curPlayers = [];
+        if (game && game.players && game.players.length > 0) {
+            curPlayers = game.players;
+        }
+        User.find({ players : { $nin: curPlayers } }).exec(function (err, players) {
+            return players;
+        });
+    }
 
     app.use('/games/randomPlayers', function (req, res) {
         if (!authorized(req, res)) return;
