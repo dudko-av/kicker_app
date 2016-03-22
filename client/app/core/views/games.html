@@ -38,6 +38,7 @@
                         </md-input-container>
                         <md-button ng-show="game.status === 2" ng-click="$ctrl.play(game)">play</md-button>
                     </div>
+                    <div ng-show="game.status === 3" class="pull-right">Wins: {{game.wins}}</div>
                     <strong>{{game.name}} </strong>
                     Created by {{game.createdBy.displayName}} {{game.date | date:"MM/dd/yyyy 'at' h:mma"}}
                 </md-subheader>

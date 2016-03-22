@@ -122,7 +122,7 @@ module.exports.controller = function (app, io) {
     app.use('/games/play', function (req, res) {
         if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
-        Game.findOneAndUpdate({'_id': req.body._id}, {status: 3}, function (err, game) {
+        Game.findOneAndUpdate({'_id': req.body._id}, {status: 3, wins: req.body.wins}, function (err, game) {
             Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
                 io.emit('GAME_UPDATE', game);
                 res.send(game);
