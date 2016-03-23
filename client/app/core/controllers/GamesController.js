@@ -14,6 +14,7 @@
             addPlayer: addPlayer,
             addScore: addScore,
             randomPlayers: randomPlayers,
+            play: play,
             showButton: showButton
         });
 
@@ -100,6 +101,12 @@
         function randomPlayers(game) {
             gamesService.randomPlayers(game).then(function (res) {
                 showToast('Players randomized');
+            });
+        }
+
+        function play(game) {
+            gamesService.play(game).then(function (res) {
+                showToast('Game active');
             });
         }
 

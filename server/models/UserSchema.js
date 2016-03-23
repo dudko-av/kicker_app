@@ -11,7 +11,7 @@ var UserSchema = new Schema({
     losses: Number,
     bloodEnemy: String, // another userId
     bestComp: String, // another userId
-    achievements: Array
+    achievements: [{type: mongoose.Schema.Types.ObjectId, ref: 'Achievement'}]
 });
 
 module.exports = mongoose.model('User', UserSchema);

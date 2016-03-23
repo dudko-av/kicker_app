@@ -3,11 +3,11 @@
 
     angular
         .module('kicker_app')
-        .service('gamesService', gamesService);
+        .service('tournamentsService', tournamentsService);
 
-    gamesService.$inject = ['$injector'];
+    tournamentsService.$inject = ['$injector'];
 
-    function gamesService($injector) {
+    function tournamentsService($injector) {
         var service = this;
         angular.extend(service, {
             create: create,
@@ -15,13 +15,12 @@
             addPlayer: addPlayer,
             addScore: addScore,
             randomPlayers: randomPlayers,
-            players: players,
-            play: play
+            players: players
         });
 
-        function create(game) {
+        function create(tournament) {
             return $injector.invoke(['$http', function ($http) {
-                return $http.post('games/create', game).then(function (res) {
+                return $http.post('tournaments/create', tournament).then(function (res) {
                     return res.data;
                 })
             }]);
@@ -29,15 +28,15 @@
 
         function list() {
             return $injector.invoke(['$http', function ($http) {
-                return $http.get('games/list').then(function (res) {
+                return $http.get('tournaments/list').then(function (res) {
                     return res.data;
                 })
             }]);
         }
 
-        function addPlayer(game) {
+        function addPlayer(tournament) {
             return $injector.invoke(['$http', function ($http) {
-                return $http.post('games/addPlayer', game).then(function (res) {
+                return $http.post('tournaments/addPlayer', tournament).then(function (res) {
                     return res.data;
                 })
             }]);
@@ -45,7 +44,7 @@
 
         function addScore(team) {
             return $injector.invoke(['$http', function ($http) {
-                return $http.post('games/addScore', team).then(function (res) {
+                return $http.post('tournaments/addScore', team).then(function (res) {
                     return res.data;
                 })
             }]);
@@ -59,17 +58,9 @@
             }]);
         }
 
-        function randomPlayers(game) {
+        function randomPlayers(tournament) {
             return $injector.invoke(['$http', function ($http) {
-                return $http.post('games/randomPlayers', game).then(function (res) {
-                    return res.data;
-                })
-            }]);
-        }
-
-        function play(game) {
-            return $injector.invoke(['$http', function ($http) {
-                return $http.post('games/play', game).then(function (res) {
+                return $http.post('tournaments/randomPlayers', tournament).then(function (res) {
                     return res.data;
                 })
             }]);
