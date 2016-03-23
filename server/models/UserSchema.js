@@ -6,9 +6,9 @@ var UserSchema = new Schema({
     image: {type: String, 'default': 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'},
     provider: String,
     providerId: String,
-    games: Number,
-    wins: Number,
-    losses: Number,
+    games: {'type': Number, 'default': 0},
+    wins: {'type': Number, 'default': 0},
+    losses: {'type': Number, 'default': 0},
     bloodEnemy: String, // another userId
     bestComp: String, // another userId
     achievements: [{type: mongoose.Schema.Types.ObjectId, ref: 'Achievement'}]

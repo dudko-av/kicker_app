@@ -54,7 +54,7 @@
                         <md-list ng-click="$ctrl.addScore(game._id, game.teams[0]._id)" class="team-blue">
                             <md-list-item ng-repeat="player in game.teams[0].players track by $index">
                                 <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
-                                <p>{{player.displayName}}</p>
+                                <p>{{player.displayName}} <b>(W: {{player.wins}}, L: {{player.losses}})</b></p>
                             </md-list-item>
                         </md-list>
                     </div>
@@ -66,7 +66,7 @@
                         <md-list ng-click="$ctrl.addScore(game._id, game.teams[1]._id)" class="team-red">
                             <md-list-item  ng-repeat="player in game.teams[1].players track by $index">
                                 <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
-                                <p>{{player.displayName}}</p>
+                                <p>{{player.displayName}} <b>(W: {{player.wins}}, L: {{player.losses}})</b></p>
                             </md-list-item>
                         </md-list>
                     </div>

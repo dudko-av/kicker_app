@@ -14,7 +14,7 @@ var GameSchema = new Schema({
     createdBy:  {'type': Schema.Types.ObjectId, ref: 'User'},
     name:       String,
     wins:       {'type': Number, 'default': 10},
-    players:    [{'type' :Schema.Types.ObjectId, ref: 'User'}],
+    players:    [{'type': Schema.Types.ObjectId, ref: 'User'}],
     teams:      [teamSchema],
     status:     {'type': Number, 'default': CREATED}
 });

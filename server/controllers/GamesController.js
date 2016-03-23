@@ -92,22 +92,39 @@ module.exports.controller = function (app, io) {
         });
     });
 
+    // FIXME
     app.use('/games/addScore', function (req, res) {
         var Game = mongoose.model('Game');
-        Game.findOne({'_id': req.body.gameId}, {'teams': {$elemMatch: {'_id': req.body.teamId}}})
+        // Game.findOne({'_id': req.body.gameId}, {'teams': {$elemMatch: {'_id': req.body.teamId}}})
+        Game.findById(req.body.gameId)
             .populate('createdBy players teams.players')
             .exec(function (err, game) {
-                game.teams[0].scores += 1;
-                req.body.scores = game.teams[0].scores;
-                Game.update(
-                    {_id: req.body.gameId, "teams._id": req.body.teamId},
-                    {$set: {"teams.$.scores": game.teams[0].scores}},
-                    {upsert: true},
-                    function (err, updated) {
-                        io.emit('GAME_SCORED', req.body);
-                        res.send(game);
+                for (var i in game.teams) {
+                    var team = game.teams[i];
+                    if (team.id === req.body.teamId) team.scores += 1;
+                    if (team.scores === game.wins) {
+                        game.status = 4;
+                        for (var j in team.players) {
+                            var p = team.players[j];
+                            p.wins += 1;
+                            p.save();
+                        }
                     }
-                );
+                } //[0].scores += 1;
+                // req.body.scores = game.teams[0].scores;
+                //Game.update(
+                //    {_id: req.body.gameId, "teams._id": req.body.teamId},
+                //    {$set: {"teams.$.scores": game.teams[0].scores}},
+                //    {upsert: true},
+                //    function (err, updated) {
+                //        io.emit('GAME_SCORED', req.body);
+                //        res.send(game);
+                //    }
+                //);
+                game.save(function (err) {
+                    io.emit('GAME_UPDATE', game);
+                    res.send(game);
+                });
             });
 
     });
