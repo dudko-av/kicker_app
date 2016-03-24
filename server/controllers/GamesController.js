@@ -119,17 +119,7 @@ module.exports.controller = function (app, io) {
                             });
                         }
                     }
-                } //[0].scores += 1;
-                // req.body.scores = game.teams[0].scores;
-                //Game.update(
-                //    {_id: req.body.gameId, "teams._id": req.body.teamId},
-                //    {$set: {"teams.$.scores": game.teams[0].scores}},
-                //    {upsert: true},
-                //    function (err, updated) {
-                //        io.emit('GAME_SCORED', req.body);
-                //        res.send(game);
-                //    }
-                //);
+                });
                 game.save(function (err) {
                     io.emit('GAME_UPDATE', game);
                     res.send(game);
