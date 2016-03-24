@@ -23,7 +23,7 @@
                                 <md-icon>group_add</md-icon>
                             </md-button>
                             <md-menu-content>
-                                <md-menu-item ng-repeat="player in $ctrl.playersList">
+                                <md-menu-item ng-repeat="player in $ctrl.playersList | filter:$ctrl.playersFilter">
                                     <md-button aria-label="add player" ng-click="$ctrl.addPlayer(game, player._id)">
                                         <img alt=""
                                              style="

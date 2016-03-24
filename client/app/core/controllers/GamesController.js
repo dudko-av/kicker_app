@@ -15,7 +15,8 @@
             addScore: addScore,
             randomPlayers: randomPlayers,
             play: play,
-            showButton: showButton
+            showButton: showButton,
+            playersFilter: playersFilter
         });
 
         init();
@@ -120,6 +121,9 @@
                     break;
                 }
             }]);
+        }
+
+        function playersFilter(value, index, array) { debugger
         }
 
         function showToast(message) {
