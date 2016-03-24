@@ -94,21 +94,29 @@ module.exports.controller = function (app, io) {
 
     // FIXME
     app.use('/games/addScore', function (req, res) {
+        if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
         // Game.findOne({'_id': req.body.gameId}, {'teams': {$elemMatch: {'_id': req.body.teamId}}})
         Game.findById(req.body.gameId)
             .populate('createdBy players teams.players')
             .exec(function (err, game) {
-                var teamIndex
-                for (var i in game.teams) {
-                    var team = game.teams[i];
-                    if (team.id === req.body.teamId) team.scores += 1;
-                    if (team.scores === game.wins) {
-                        game.status = 4;
-                        for (var j in team.players) {
-                            var p = team.players[j];
-                            p.wins += 1;
-                            // p.save();
+                var scoredTeamIndex = 0;
+                game.teams.forEach(function (team, index) {
+                    if (team.id === req.body.teamId) {
+                        scoredTeamIndex = index;
+                        team.scores += 1;
+                        if (team.scores === game.wins) {
+                            game.status = 4;
+                            // FIXME
+                            team.players.forEach(function (pl) {
+                                pl.wins += 1;
+                                pl.save();
+                            });
+                            game.teams[index ? 0 : 1].players.forEach(function (pl) {
+                                pl.losses += 1;
+                                // FIXME
+                                pl.save();
+                            });
                         }
                     }
                 } //[0].scores += 1;
