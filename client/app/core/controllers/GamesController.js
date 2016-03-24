@@ -94,8 +94,9 @@
             }).length;
         };
 
-        function addScore(gameId, teamId) {
-            gamesService.addScore({gameId: gameId, teamId: teamId}).then(function (res) {});
+        function addScore(game, teamInx) {
+            if (game.status !== 3) return;
+            gamesService.addScore({gameId: game._id, teamId: game.teams[teamInx]._id});
         }
 
         function randomPlayers(game) {

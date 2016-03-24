@@ -12,25 +12,41 @@
             <md-list ng-cloak ng-repeat="game in $ctrl.gamesList track by $index" class="well well-sm">
                 <md-subheader class="md-no-sticky">
                     <div style="position: absolute; right: 0; top: 0; margin-top: -16px; margin-right: -16px;">
-                        <md-button ng-show="game.status === 2" ng-click="$ctrl.randomPlayers(game)" class="md-icon-button">
+                        <md-button ng-show="game.status === 2" ng-click="$ctrl.randomPlayers(game)"
+                                   class="md-icon-button">
                             <md-icon>autorenew</md-icon>
                         </md-button>
                         <md-menu md-position-mode="target-right target" ng-show="game.players.length < 4">
                             <!-- Trigger element is a md-button with an icon -->
-                            <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" aria-label="Open sample menu">
+                            <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button"
+                                       aria-label="Open sample menu">
                                 <md-icon>group_add</md-icon>
                             </md-button>
                             <md-menu-content>
                                 <md-menu-item ng-repeat="player in $ctrl.playersList">
-                                    <md-button aria-label="add player" ng-click="$ctrl.addPlayer(game, player._id)" ng-bind="player.displayName"></md-button>
+                                    <md-button aria-label="add player" ng-click="$ctrl.addPlayer(game, player._id)">
+                                        <img alt=""
+                                             style="
+                                            margin-top: 6px;
+                                            margin-bottom: 8px;
+                                            margin-right: 16px;
+                                            border-radius: 50%;
+                                            box-sizing: content-box;
+                                            width: 35px;
+                                            height: 35px;"
+                                             ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}"
+                                             class="md-avatar"/>
+                                        {{player.displayName}}
+                                    </md-button>
                                 </md-menu-item>
                             </md-menu-content>
                         </md-menu>
-                        <md-button ng-show="$ctrl.addPlayer.show(game)" ng-click="$ctrl.addPlayer(game)" class="md-icon-button">
+                        <md-button ng-show="$ctrl.addPlayer.show(game)" ng-click="$ctrl.addPlayer(game)"
+                                   class="md-icon-button">
                             <md-icon>person_add</md-icon>
                         </md-button>
                         <md-input-container ng-show="game.status === 2" style="margin-bottom: 0; margin-top: -7px;">
-                            <md-select aria-label="" ng-model="game.wins">
+                            <md-select aria-label="aria-label" ng-model="game.wins">
                                 <md-option ng-repeat="item in [10,9,8,7,6,5,4,3,2,1]" value="{{item}}">
                                     {{item}}
                                 </md-option>
@@ -43,17 +59,22 @@
                     Created by {{game.createdBy.displayName}} {{game.date | date:"MM/dd/yyyy 'at' h:mma"}}
                 </md-subheader>
 
-                <md-list-item ng-show="!game.teams.length" ng-repeat="player in game.players track by $index" ng-click="">
-                    <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
+                <md-list-item ng-show="!game.teams.length" ng-repeat="player in game.players track by $index"
+                              ng-click="">
+                    <img alt=""
+                         ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}"
+                         class="md-avatar"/>
                     <p>{{player.displayName}}</p>
                 </md-list-item>
 
                 <!-- TODO -->
                 <div class="row" ng-show="game.teams.length">
                     <div class="col-lg-5">
-                        <md-list ng-click="$ctrl.addScore(game._id, game.teams[0]._id)" class="team-blue">
+                        <md-list ng-click="$ctrl.addScore(game, 0)" class="team-blue">
                             <md-list-item ng-repeat="player in game.teams[0].players track by $index">
-                                <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
+                                <img alt=""
+                                     ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}"
+                                     class="md-avatar"/>
                                 <p>{{player.displayName}} <b>(W: {{player.wins}}, L: {{player.losses}})</b></p>
                             </md-list-item>
                         </md-list>
@@ -63,9 +84,11 @@
                         <div class="h3">{{game.teams[0].scores}} : {{game.teams[1].scores}}</div>
                     </div>
                     <div class="col-lg-5">
-                        <md-list ng-click="$ctrl.addScore(game._id, game.teams[1]._id)" class="team-red">
-                            <md-list-item  ng-repeat="player in game.teams[1].players track by $index">
-                                <img alt="" ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}" class="md-avatar" />
+                        <md-list ng-click="$ctrl.addScore(game, 1)" class="team-red">
+                            <md-list-item ng-repeat="player in game.teams[1].players track by $index">
+                                <img alt=""
+                                     ng-src="{{player.image || 'http://icons.iconarchive.com/icons/femfoyou/angry-birds/1024/angry-bird-icon.png'}}"
+                                     class="md-avatar"/>
                                 <p>{{player.displayName}} <b>(W: {{player.wins}}, L: {{player.losses}})</b></p>
                             </md-list-item>
                         </md-list>

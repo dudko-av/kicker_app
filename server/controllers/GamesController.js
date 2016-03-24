@@ -99,6 +99,7 @@ module.exports.controller = function (app, io) {
         Game.findById(req.body.gameId)
             .populate('createdBy players teams.players')
             .exec(function (err, game) {
+                var teamIndex
                 for (var i in game.teams) {
                     var team = game.teams[i];
                     if (team.id === req.body.teamId) team.scores += 1;
@@ -107,7 +108,7 @@ module.exports.controller = function (app, io) {
                         for (var j in team.players) {
                             var p = team.players[j];
                             p.wins += 1;
-                            p.save();
+                            // p.save();
                         }
                     }
                 } //[0].scores += 1;
