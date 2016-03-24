@@ -123,7 +123,8 @@
             }]);
         }
 
-        function playersFilter(value, index, array) { debugger
+        function playersFilter(value, index, array) {
+            return true;
         }
 
         function showToast(message) {
