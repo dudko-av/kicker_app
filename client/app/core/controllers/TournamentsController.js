@@ -9,7 +9,9 @@
 
     function TournamentsController($rootScope, $injector, $mdToast, tournamentsService, socket) {
         var ctrl = this;
-        angular.extend(ctrl, {});
+        angular.extend(ctrl, {
+            create: create
+        });
 
         init();
 
@@ -66,8 +68,12 @@
                     targetEvent: $event,
                     clickOutsideToClose: true
                 })
-                    .then(function (game) {
-                        angular.extend(game || {}, {date: new Date()});
+                    .then(function (game) { debugger
+                        angular.extend(game || {}, {
+                            createdBy: $rootScope.user._id,
+                            players: [$rootScope.user._id],
+                            date: new Date()
+                        });
                         tournamentsService.create(game).then(function (res) {
                             showToast('Game created');
                         });

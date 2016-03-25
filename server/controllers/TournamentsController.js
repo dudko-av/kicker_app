@@ -2,34 +2,24 @@ var mongoose = require('mongoose');
 
 module.exports.controller = function (app, io) {
 
-    /**
-     * a home page route
-     */
-    app.get('/game/create', function (req, res) {
-        var Game = mongoose.model('Game');
-        var Team = mongoose.model('Team');
-        var game = new Game({});
-        var team1 = new Team({});
-        var team2 = new Team({});
+    app.use('/tournaments/create', function (req, res) {
+        var Tournament = mongoose.model('Tournament');
+        var trm = new Tournament(req.body);
+        trm.save(function (err, trm) {
+            res.send(trm);
+        })
+    });
 
-        team1.teamName = "Blue";
-        team2.teamName = "Red";
-
-        game.date = Date.now();
-        game.teams = [team1, team2];
-        // any logic goes here
-        game.save(function (err) {
-            if (!err) {
-                console.log('Game saved!');
+    app.use('/tournaments/list', function (req, res) {
+        var Tournament = mongoose.model('Tournament');
+        Tournament.find(null, null, {
+            skip: 0, // Starting Row
+            limit: 10, // Ending Row
+            sort:{
+                date: -1 //Sort by Date Added DESC
             }
+        }).populate('createdBy players').exec(function(err, trms) {
+            res.send(trms);
         });
-        res.send(game);
     });
-
-    app.post('/game/addTeam', function (req, res) {
-        var Game = mongoose.model('Game');
-        var game = Game.findById(req.body.gameId);
-        // any logic goes here
-        res.send(game);
-    });
-}
+};
