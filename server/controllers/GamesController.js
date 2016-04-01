@@ -16,6 +16,7 @@ module.exports.controller = function (app, io) {
         var game = new Game({
             createdBy: req.user._id,
             players: [req.user._id],
+            teams : [new Team({players: [req.user._id]}), new Team()],
             name: req.body.name
         });
         //var team1 = new Team({});
@@ -48,7 +49,7 @@ module.exports.controller = function (app, io) {
         var Team = mongoose.model('Team');
         Game.findById(req.body.game._id, function (err, game) {
             if (!game.teams.length) {
-                game.teams = new Array(2);
+                game.teams = [new Team(), new Team()];
             }
             if (game.players.length < 4) game.players.push(req.body.playerId || req.user._id);
             if (game.players.length == 1) {
