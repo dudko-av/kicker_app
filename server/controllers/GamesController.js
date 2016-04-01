@@ -130,7 +130,7 @@ module.exports.controller = function (app, io) {
 
     app.use('/games/players', function (req, res) {
         if (!authorized(req, res)) return;
-        var game  = req.body;
+        var game  = req.body.game;
         getPlayersForGame(game, function (players) {
             res.send(players);
         });
