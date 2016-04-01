@@ -42,21 +42,37 @@ module.exports.controller = function (app, io) {
         res.send(game);
     });
 
+    //TODO fix this shit
     app.post('/games/addPlayer', function (req, res) {
         var Game = mongoose.model('Game');
         var Team = mongoose.model('Team');
         Game.findById(req.body.game._id, function (err, game) {
+            if (!game.teams.length) {
+                game.teams = new Array(2);
+            }
             if (game.players.length < 4) game.players.push(req.body.playerId || req.user._id);
+            if (game.players.length == 1) {
+                game.teams = [
+                    {players: [game.players[0]]}
+                ]
+            }
+            if (game.players.length == 2) {
+                game.teams[1].players.push(game.players[1]);
+            }
+            if (game.players.length == 3) {
+                game.teams[0].players.push(game.players[2]);
+            }
             if (game.players.length == 4) {
                 game.status = 2;
-                var random = Math.floor(Math.random() * 3) + 1;
-                var team2 = game.players.filter(function (item, index) {
-                    return index !== 0 && index !== random;
-                });
-                game.teams = [
-                    {players: [game.players[0], game.players[random]]},
-                    {players: team2}
-                ];
+                //var random = Math.floor(Math.random() * 3) + 1;
+                //var team2 = game.players.filter(function (item, index) {
+                //    return index !== 0 && index !== random;
+                //});
+                //game.teams = [
+                //    {players: [game.players[0], game.players[random]]},
+                //    {players: team2}
+                //];
+                game.teams[1].players.push(game.players[3]);
             }
             game.save(function (err, game) {
                 Game.findById(game._id).populate('createdBy players teams.players').exec(function (err, game) {
@@ -130,7 +146,7 @@ module.exports.controller = function (app, io) {
 
     app.use('/games/players', function (req, res) {
         if (!authorized(req, res)) return;
-        var game  = req.body.game;
+        var game  = req.body;
         getPlayersForGame(game, function (players) {
             res.send(players);
         });
@@ -144,7 +160,7 @@ module.exports.controller = function (app, io) {
     function getPlayersForGame(game, callback) {
         var Game = mongoose.model('Game');
         var User = mongoose.model('User');
-        if (game) {
+        if (game._id) {
             Game.findById(game._id, function(err, game){
                 var curPlayersId = game.players;
                 User.find({ _id : { $nin: curPlayersId } }).exec(function (err, players) {
