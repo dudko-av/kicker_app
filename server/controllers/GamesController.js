@@ -29,7 +29,7 @@ module.exports.controller = function (app, io) {
         //game.teams = [team1, team2];
         //// any logic goes here
         game.save(function (err) {
-            Game.findById(game._id).populate('createdBy players').exec(function (err, game) {
+            Game.findById(game._id).populate('createdBy players teams.players').exec(function (err, game) {
                 io.emit('GAME_NEW', game);
                 res.send(game);
             });
