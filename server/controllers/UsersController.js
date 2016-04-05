@@ -17,6 +17,16 @@ module.exports.controller = function (app, io) {
 
     });
 
+    app.post('/users/profiles', function(req, res) {
+        if (!authorized(req, res)) return;
+        var User = mongoose.model('User');
+        var playersIds = req.body;
+        User.find({ _id : { $in: playersIds } }).exec(function (err, players) {
+            res.send(players);
+        });
+
+    });
+
     function authorized(req, res) {
         if (!req.user) res.sendStatus(401);
         return req.user ? true : false;
