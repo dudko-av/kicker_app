@@ -39,23 +39,39 @@ module.exports.controller = function (app, io) {
     app.post('/games/update', function (req, res) {
         var Game = mongoose.model('Game');
         var game = req.body;
-        var id = req.body._id;
-        delete game._id;
-        Game.findByIdAndUpdate(id, game, function (err, game) {
-            if (err) {
-                res.send(err);
-            } else {
-                Game.findById(id).populate('createdBy players teams.players').exec(function(err, game) {
+        var isNewGame = game._id === null || game.id === "";
+        if (isNewGame) {
+            game.save(function(err) {
+                if (err) {
+                    res.send(err);
+                }
+                Game.findById(game._id).populate('createdBy players teams.players').exec(function (err, game) {
                     if (err) {
                         res.send(err)
                     } else {
-                        io.emit('GAME_UPDATE', game);
+                        io.emit('GAME_NEW', game);
                         res.send(game);
                     }
                 });
-            }
-        });
-
+            })
+        } else {
+            var id = req.body._id;
+            delete game._id;
+            Game.findByIdAndUpdate(id, game, function (err, game) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    Game.findById(id).populate('createdBy players teams.players').exec(function(err, game) {
+                        if (err) {
+                            res.send(err)
+                        } else {
+                            io.emit('GAME_UPDATE', game);
+                            res.send(game);
+                        }
+                    });
+                }
+            });
+        }
     });
 
     app.post('/games/addTeam', function (req, res) {
