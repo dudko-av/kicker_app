@@ -39,12 +39,13 @@ module.exports.controller = function (app, io) {
     app.post('/games/update', function (req, res) {
         var Game = mongoose.model('Game');
         var game = req.body;
+        var id = req.body._id;
         delete game._id;
-        Game.findByIdAndUpdate(req.body._id, game, function (err, game) {
+        Game.findByIdAndUpdate(id, game, function (err, game) {
             if (err) {
                 res.send(err);
             } else {
-                Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
+                Game.findById(id).populate('createdBy players teams.players').exec(function(err, game) {
                     if (err) {
                         res.send(err)
                     } else {
