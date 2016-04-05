@@ -36,6 +36,19 @@ module.exports.controller = function (app, io) {
         });
     });
 
+    app.post('/games/update', function (req, res) {
+        var Game = mongoose.model('Game');
+        var game = req.body;
+
+        Game.findByIdAndUpdate(req.body._id, game, function (err, game) {
+            Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
+                io.emit('GAME_UPDATE', game);
+                res.send(game);
+            });
+        });
+
+    });
+
     app.post('/games/addTeam', function (req, res) {
         var Game = mongoose.model('Game');
         var game = Game.findById(req.body.gameId);
