@@ -23,7 +23,11 @@ module.exports.controller = function (app, io) {
 
         if (playersIds) {
             User.find({ _id : { $in: playersIds } }).exec(function (err, players) {
-                res.send(players);
+                if (err) {
+                    res.send(err)
+                } else {
+                    res.send(players);
+                }
             });
         }
 
