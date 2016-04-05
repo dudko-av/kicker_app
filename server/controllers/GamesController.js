@@ -40,10 +40,14 @@ module.exports.controller = function (app, io) {
         var Game = mongoose.model('Game');
         var game = req.body;
         Game.findByIdAndUpdate(req.body._id, game, function (err, game) {
-            Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
-                io.emit('GAME_UPDATE', game);
+            if (err) {
                 res.send(game);
-            });
+            } else {
+                Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
+                    io.emit('GAME_UPDATE', game);
+                    res.send(game);
+                });
+            }
         });
 
     });
