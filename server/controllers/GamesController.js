@@ -39,6 +39,7 @@ module.exports.controller = function (app, io) {
     app.post('/games/update', function (req, res) {
         var Game = mongoose.model('Game');
         var game = req.body;
+        delete game._id;
         Game.findByIdAndUpdate(req.body._id, game, function (err, game) {
             if (err) {
                 res.send(err);
