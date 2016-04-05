@@ -22,7 +22,7 @@ module.exports.controller = function (app, io) {
         var playersIds = req.body;
 
         if (playersIds) {
-            User.find({ _id : { $in: playersIds } }).exec(function (err, players) {
+            User.find({ '_id' : { $in: playersIds } }).exec(function (err, players) {
                 if (err) {
                     res.send(err)
                 } else {
