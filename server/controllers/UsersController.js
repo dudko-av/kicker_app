@@ -20,6 +20,7 @@ module.exports.controller = function (app, io) {
     app.post('/users/profiles', function(req, res) {
         if (!authorized(req, res)) return;
         var playersIds = req.body;
+
         if (playersIds) {
             User.find({ _id : { $in: playersIds } }).exec(function (err, players) {
                 res.send(players);
