@@ -41,11 +41,15 @@ module.exports.controller = function (app, io) {
         var game = req.body;
         Game.findByIdAndUpdate(req.body._id, game, function (err, game) {
             if (err) {
-                res.send(game);
+                res.send(err);
             } else {
                 Game.findById(req.body._id).populate('createdBy players teams.players').exec(function(err, game) {
-                    io.emit('GAME_UPDATE', game);
-                    res.send(game);
+                    if (err) {
+                        res.send(err)
+                    } else {
+                        io.emit('GAME_UPDATE', game);
+                        res.send(game);
+                    }
                 });
             }
         });
