@@ -40,7 +40,7 @@ module.exports.controller = function (app, io) {
         var Game = mongoose.model('Game');
         var game = req.body;
         //var isNewGame = game.id === "";
-        if (!game.id) {
+        if (!isObjectId(game._id)) {
             var gameToSave = new Game({
                 createdBy: game.createdBy,
                 players: game.players,
@@ -196,6 +196,11 @@ module.exports.controller = function (app, io) {
             res.send(players);
         });
     });
+
+    function isObjectId(id) {
+        return mongoose.Types.ObjectId.isValid(n);
+    }
+
 
     /**
      * Getting players for game
