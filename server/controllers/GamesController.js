@@ -39,13 +39,19 @@ module.exports.controller = function (app, io) {
     app.post('/games/update', function (req, res) {
         var Game = mongoose.model('Game');
         var game = req.body;
-        var isNewGame = game._id === null || game.id === "";
-        if (isNewGame) {
-            game.save(function(err) {
+        //var isNewGame = game.id === "";
+        if (!game.id) {
+            var gameToSave = new Game({
+                createdBy: game.createdBy,
+                players: game.players,
+                teams : game.teams,
+                name: game.name
+            });
+            gameToSave.save(function(err) {
                 if (err) {
                     res.send(err);
                 }
-                Game.findById(game._id).populate('createdBy players teams.players').exec(function (err, game) {
+                Game.findById(gameToSave._id).populate('createdBy players teams.players').exec(function (err, game) {
                     if (err) {
                         res.send(err)
                     } else {
