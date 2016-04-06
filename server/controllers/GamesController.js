@@ -2,6 +2,21 @@ var mongoose = require('mongoose');
 
 module.exports.controller = function (app, io) {
 
+    app.post('/games/removeAll', function(req, res) {
+        if (!authorized(req, res)) return;
+        if (req.body.pass === "123") {
+            var Game = mongoose.model('Game');
+            Game.remove({}, function(err, removed) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(removed);
+                }
+            });
+        }
+
+    });
+
     app.post('/game/get', function(req, res) {
         if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
@@ -11,6 +26,7 @@ module.exports.controller = function (app, io) {
     });
 
     app.post('/games/create', function (req, res) {
+        if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
         var Team = mongoose.model('Team');
         var game = new Game({
@@ -37,6 +53,7 @@ module.exports.controller = function (app, io) {
     });
 
     app.post('/games/update', function (req, res) {
+        if (!authorized(req, res)) return;
         var Game = mongoose.model('Game');
         var game = req.body;
         //var isNewGame = game.id === "";
