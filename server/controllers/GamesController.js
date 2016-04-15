@@ -62,7 +62,8 @@ module.exports.controller = function (app, io) {
                 createdBy: game.createdBy,
                 players: game.players,
                 teams : game.teams,
-                name: game.name
+                name: game.name,
+                status: game.status
             });
             gameToSave.save(function(err) {
                 if (err) {
