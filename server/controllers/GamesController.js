@@ -63,6 +63,7 @@ module.exports.controller = function (app, io) {
                 players: game.players,
                 teams : game.teams,
                 name: game.name,
+                wins: game.wins,
                 status: game.status
             });
             gameToSave.save(function(err) {
